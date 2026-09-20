@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 const handle = require('./api/[...slug].js');
 const PORT = Number(process.env.PORT) || 3000;
-const INDEX = path.join(__dirname, 'index.html');
+const INDEX = path.join(__dirname, 'public', 'index.html');
 
 http.createServer((req, res) => {
   const p = new URL(req.url, 'http://local').pathname;
@@ -15,6 +15,10 @@ http.createServer((req, res) => {
   if (req.method === 'GET' && (p === '/' || p === '/index.html')) {
     res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' });
     return res.end(fs.readFileSync(INDEX));
+  }
+  if (req.method === 'GET' && p === '/lending.js') {
+    res.writeHead(200, { 'Content-Type': 'application/javascript; charset=utf-8', 'Cache-Control': 'no-cache' });
+    return res.end(fs.readFileSync(path.join(__dirname, 'public', 'lending.js')));
   }
   res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
   res.end('Introuvable');
