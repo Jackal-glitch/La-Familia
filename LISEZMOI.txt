@@ -1,0 +1,115 @@
+LA FAMILIA - GESTION DES PRÊTS (VERSION VERCEL)
+===============================================
+
+Une fois l'application en ligne, il n'y a plus rien à installer sur les ordinateurs : chaque personne ouvre une
+adresse (par exemple https://la-familia.vercel.app) dans son navigateur, sur ordinateur ou téléphone, et se connecte avec
+son nom d'utilisateur et son mot de passe. Les écrans se synchronisent tout seuls toutes les quelques secondes
+(le mot "Synchronisé" avec un point vert, en bas du menu). La mise en ligne se fait UNE SEULE FOIS, par une seule personne.
+
+CONTENU DU DOSSIER
+  index.html         L'application (écrans, calculs)
+  api/[...slug].js   Le serveur : comptes, base de données, règles de gestion
+  package.json       Descriptif du projet (installe automatiquement le pilote de base de données)
+  vercel.json        Réglages de sécurité de l'hébergement
+  local.js           Facultatif : pour essayer l'application sur un ordinateur (voir la fin)
+
+COÛTS (à vérifier sur les sites, les tarifs évoluent)
+  - Vercel : la formule gratuite "Hobby" est réservée aux usages personnels et non commerciaux. Pour l'activité de
+    La Familia, il faut la formule "Pro" : environ 20 $ par mois (un seul compte "déployeur" ; les personnes qui consultent
+    l'application n'ont pas besoin de compte Vercel).
+  - Base de données Turso (installée depuis Vercel) : une formule gratuite existe, suffisante pour démarrer.
+  Au total : environ 20 $ par mois pour commencer.
+
+------------------------------------------------------------------------------------------------
+MISE EN LIGNE, ÉTAPE PAR ÉTAPE (environ 30 minutes, uniquement dans le navigateur)
+------------------------------------------------------------------------------------------------
+ÉTAPE 1. Mettre les fichiers sur GitHub (le "coffre" où Vercel ira les chercher)
+  1. Sur https://github.com, créez un compte gratuit (Sign up).
+  2. Cliquez sur "+" en haut à droite, puis "New repository". Nom : la-familia. Choisissez "Private". "Create repository".
+  3. Cliquez sur le lien "uploading an existing file".
+  4. Dans le dossier la-familia de votre ordinateur, sélectionnez TOUT son contenu : les fichiers index.html, package.json,
+     vercel.json, local.js, LISEZMOI.txt ET le dossier "api". Glissez le tout dans la fenêtre GitHub.
+  5. Vérifiez que la liste montre bien "api/[...slug].js", puis cliquez sur "Commit changes".
+  Si le dossier api ne se glisse pas correctement : cliquez sur "Add file" > "Create new file", tapez comme nom
+  api/[...slug].js (les "/" créent le dossier), ouvrez le fichier [...slug].js avec le Bloc-notes ou TextEdit, copiez tout son
+  contenu dans GitHub, puis "Commit changes".
+
+ÉTAPE 2. Créer le projet sur Vercel
+  1. Sur https://vercel.com, connectez-vous avec "Continue with GitHub".
+  2. "Add New..." > "Project", choisissez le dépôt la-familia, "Import".
+  3. Framework Preset : laissez "Other". Ne changez rien d'autre. Cliquez sur "Deploy".
+  4. Passez à la formule Pro (usage commercial) : Settings > Billing > Upgrade, puis carte bancaire.
+
+ÉTAPE 3. Ajouter la base de données
+  1. Dans le projet Vercel, onglet "Storage" > "Create Database" > choisissez "Turso Cloud" (ou "Turso").
+  2. Choisissez la formule gratuite, donnez un nom (la-familia-db) et validez.
+  3. Connectez la base au projet la-familia, pour tous les environnements. Vercel ajoute tout seul les deux variables
+     TURSO_DATABASE_URL et TURSO_AUTH_TOKEN (vérifiables dans Settings > Environment Variables).
+
+ÉTAPE 4. Choisir le code d'installation
+  1. Settings > Environment Variables > "Add New".
+  2. Key : SETUP_CODE. Value : un code de votre choix (par exemple une phrase de 3 ou 4 mots avec un chiffre). NOTEZ-LE.
+  3. Laissez tous les environnements cochés, puis "Save". Ce code sert une seule fois, à créer le compte gestionnaire.
+
+ÉTAPE 5. Relancer la mise en ligne (obligatoire pour prendre en compte les variables)
+  Onglet "Deployments" > le dernier déploiement > menu "..." > "Redeploy" > confirmer. Attendre l'état "Ready".
+
+ÉTAPE 6. Créer le compte gestionnaire (une seule fois)
+  1. Ouvrez l'adresse du projet (bouton "Visit" ou section Domains, du type la-familia.vercel.app).
+  2. À l'écran "Créer le compte gestionnaire" : code d'installation (étape 4), nom d'utilisateur, mot de passe (8 caractères
+     minimum), confirmation. Le fuseau horaire est réglé automatiquement d'après votre appareil.
+  3. Réglages : vérifiez le nom, la devise, le taux (20 %) et la durée maximale (60 jours).
+  4. Dépenses et retraits : enregistrez le capital de départ (type "Apport de capital").
+
+ÉTAPE 7. Créer les autres comptes
+  Réglages > Comptes d'accès > Ajouter un compte.
+  - Propriétaire : consultation seule (rien n'est modifiable). C'est le type à choisir pour le propriétaire.
+  - Gestionnaire : peut tout saisir et modifier.
+  Créez dès maintenant un SECOND compte gestionnaire : c'est la meilleure protection contre un mot de passe oublié.
+  Communiquez à chaque personne l'adresse, son nom d'utilisateur et son mot de passe.
+  Chacune peut ensuite changer son mot de passe dans Réglages > Mon mot de passe.
+  Si le propriétaire voit une page de connexion Vercel au lieu de l'application, l'adresse utilisée n'est pas l'adresse de
+  production : utilisez celle de la section Domains du projet.
+
+------------------------------------------------------------------------------------------------
+AU QUOTIDIEN
+------------------------------------------------------------------------------------------------
+SAUVEGARDES (important)
+  L'application ne peut pas enregistrer de copies automatiques sur un ordinateur. Téléchargez une sauvegarde
+  chaque semaine : Réglages > Télécharger une sauvegarde (le tableau de bord vous le rappelle). Conservez le fichier ailleurs
+  (clé USB, e-mail). Réglages > Restaurer une sauvegarde remplace les prêts et dépenses par ceux du fichier ; une copie de
+  l'état actuel est d'abord téléchargée. Les comptes ne sont pas concernés. Consultez aussi les options de sauvegarde
+  proposées par Turso pour votre formule.
+
+METTRE À JOUR L'APPLICATION (si on vous envoie de nouveaux fichiers)
+  Sur GitHub, dans le dépôt la-familia : ouvrez le fichier concerné, remplacez son contenu (ou "Add file" > "Upload files"
+  avec le même nom), "Commit changes". Vercel remet l'application en ligne tout seul en 1 à 2 minutes. Les données ne sont pas touchées.
+
+MOT DE PASSE GESTIONNAIRE OUBLIÉ
+  - Un autre compte gestionnaire peut réinitialiser le mot de passe : Réglages > Comptes d'accès.
+  - Sinon, il faut supprimer les comptes dans la console de la base Turso (les prêts et dépenses ne sont pas touchés), puis
+    refaire l'étape 6. Contactez la personne qui a mis l'application en ligne.
+
+RÈGLES DE CALCUL
+  - Intérêt = capital x taux (20 % par défaut), calculé une seule fois, quelle que soit la durée (60 jours maximum).
+  - À rembourser = capital + intérêts. Échéance = date du prêt + durée.
+  - Statuts : En cours, En retard (échéance dépassée et solde restant), Remboursé, Perdu (classé en perte).
+  - Les paiements remboursent d'abord le capital, puis les intérêts. Un intérêt n'est donc compté comme gagné
+    qu'une fois le capital du prêt récupéré (méthode prudente).
+  - Solde de caisse = apports + paiements reçus - prêts remis - dépenses - retraits du propriétaire.
+  - Bénéfice net = intérêts encaissés - dépenses - pertes. Les retraits du propriétaire n'entrent pas dans le bénéfice.
+  - La date du jour suit le fuseau horaire choisi dans Réglages.
+
+SÉCURITÉ
+  - Connexion chiffrée (https) fournie par Vercel.
+  - Mots de passe stockés sous forme chiffrée (scrypt), jamais en clair. 8 essais ratés depuis la même adresse bloquent la connexion 10 minutes.
+  - Le propriétaire ne peut rien modifier, même en essayant de contourner l'écran : le serveur refuse ses modifications.
+  - Choisissez des mots de passe longs et différents pour chaque personne. Ne partagez pas le compte gestionnaire.
+
+------------------------------------------------------------------------------------------------
+FACULTATIF : ESSAYER SUR UN ORDINATEUR
+------------------------------------------------------------------------------------------------
+  Node.js 22.13 ou plus récent est nécessaire (https://nodejs.org). Dans le dossier : "node local.js", puis ouvrir
+  http://localhost:3000 et créer le compte gestionnaire (aucun code d'installation n'est demandé sur l'ordinateur lui-même).
+  Les données de cet essai restent dans le dossier "data" et ne sont pas partagées avec la version en ligne :
+  pour les transférer, téléchargez une sauvegarde puis restaurez-la dans l'autre version.
